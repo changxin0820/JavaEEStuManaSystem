@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.JavaG.dao.UserDao">
+    <select id="getUser"  resultType="com.JavaG.domain.User" >
+    select * from user_login where id = #{id}
+    </select>
+    <select id="getUserById" parameterType="int"  resultType="com.JavaG.domain.User" >
+    select * from user_login where id = #{id}
+    </select>
+    <update id="updatePass">
+        update user_login set password=#{newPass} where id=#{id}
+    </update>
+<insert id="insertUser" parameterType="com.JavaG.domain.User" >
+    insert
+    into user_login(id,username,password,type,status)
+    values(#{id},#{username},#{password},#{type},#{status})
+
+</insert>
+    <select id="getAllUsers" resultType="com.JavaG.domain.Student">
+        select a.*,b.username,b.status from student a,user_login b where a.id=b.id
+    </select>
+    <update id="updateUserStatus">
+       update user_login set status=#{status} where id=#{id}
+    </update>
+</mapper>

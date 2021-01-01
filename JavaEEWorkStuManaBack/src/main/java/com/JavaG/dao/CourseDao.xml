@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JavaG.dao.CourseDao">
+    <resultMap id="CourseTeacherMap" type="com.JavaG.domain.Course">
+        <id property="id" column="id"></id>
+        <result property="name" column="name" jdbcType="VARCHAR"></result>
+        <result property="credit" column="credit" ></result>
+        <result property="status" column="status" ></result>
+        <result property="period" column="period" ></result>
+        <result property="time" column="time"></result>
+        <result property="place" column="place"></result>
+
+
+        <!--一对一的关系映射，封装配置teacher的内容-->
+        <association property="teacher" javaType="com.JavaG.domain.Teacher">
+            <id property="id" column="tid"></id>
+            <result column="teacherName" property="name"></result>
+        </association>
+
+
+    </resultMap>
+    <select id="findAllCourseByStudentId" parameterType="java.lang.Integer" resultMap="CourseTeacherMap">
+        SELECT
+        c.id as id,
+        c.name as name,
+        c.credit as credit,
+        c.status as status,
+        c.period as period,
+        c.time as time,
+        c.place as place,
+        t.id as tid,
+        t.name as teacherName
+        FROM course c,teacher t
+        WHERE
+        c.id IN
+        (SELECT s.cId
+        FROM sc s
+        WHERE s.sId = #{id})
+        and c.teacherId=t.id
+    </select>
+    <delete id="deleteStudentCourse" parameterType="com.JavaG.domain.SC">
+        DELETE
+        FROM sc
+        WHERE
+        sId=#{sId}
+          AND cId=#{cId}
+    </delete>
+    <insert id="createCourse" parameterType="com.JavaG.domain.Course">
+        INSERT
+        into course(name,credit,period,status,time,place,teacherId)
+        VALUES(#{name},#{credit},#{period},#{status},#{time},#{place},#{teacherId})
+    </insert>
+   <insert id="selectCourse" parameterType="com.JavaG.domain.SC">
+       insert
+       into sc(sId,cId)
+       values (#{sId},#{cId})
+   </insert>
+    <select id="findAllCourse" resultMap="CourseTeacherMap">
+        SELECT
+            c.id as id,
+            c.name as name,
+            c.credit as credit,
+            c.status as status,
+            c.period as period,
+            c.time as time,
+            c.place as place,
+            t.id as tid,
+            t.name as teacherName
+        FROM course c,teacher t
+        WHERE c.teacherId=t.id
+    </select>
+</mapper>

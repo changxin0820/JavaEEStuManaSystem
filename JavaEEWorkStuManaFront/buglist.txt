@@ -1,0 +1,5 @@
+造成每次发起请求都生成一个session的原因：
+    关掉了cookie
+解决方案：
+打开cookie，即在main.js添加
+    axios.defaults.withCredentials=true;

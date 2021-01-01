@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:接口的全限定名称-->
+<mapper namespace="com.JavaG.dao.ReportCardDao">
+    <!--查询所有成绩-->
+    <select id="selectReportCard" resultType="com.JavaG.domain.ReportCard">
+        select * from reportcard where sid=#{sid}
+    </select>
+
+    <!--增加成绩-->
+    <update id="insertScore" >
+        UPDATE reportcard SET performance = JSON_INSERT(performance, "$."#{course}, #{score}) where sid=#{sid};
+    </update>
+</mapper>
+
+        <!--此文件是sql映射文件，用来写sql语句的，一个接口对应一个sql映射文件-->

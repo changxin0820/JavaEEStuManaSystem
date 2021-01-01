@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JavaG.dao.MajorDao">
+
+    <select id="findAllMajors" resultType="com.JavaG.domain.Major">
+        select * from major
+    </select>
+
+
+    <select id="findMajorsByAcademyId" resultType="com.JavaG.domain.Major">
+        select m.* from major m,academy_major am where m.id=am.majorId and am.academyId=#{academyId}
+    </select>
+</mapper>

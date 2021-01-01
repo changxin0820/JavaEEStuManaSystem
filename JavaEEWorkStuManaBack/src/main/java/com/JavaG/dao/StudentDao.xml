@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.JavaG.dao.StudentDao">
+    <!-- 定义封装Student、Major、Academy的resultMap-->
+    <resultMap id="studentMajorAcademyMap" type="com.JavaG.domain.Student">
+        <id property="id" column="id"></id>
+        <result property="name" column="name" jdbcType="VARCHAR"></result>
+        <result property="sex" column="sex" jdbcType="VARCHAR"></result>
+        <result property="nation" column="nation" jdbcType="VARCHAR"></result>
+        <result property="politicsStatus" column="politicsStatus" jdbcType="VARCHAR"></result>
+        <result property="idCard" column="idCard"></result>
+        <result property="birth" column="birth"></result>
+        <result property="phoneNum" column="phoneNum"></result>
+        <result property="grade" column="grade"></result>
+        <result property="majorId" column="majorId"></result>
+        <result property="academyId" column="academyId"></result>
+        <result property="nativePlace" column="nativePlace" jdbcType="VARCHAR"></result>
+
+        <!--一对一的关系映射，封装配置major的内容-->
+        <association property="major" javaType="com.JavaG.domain.Major">
+            <id property="id" column="mid"></id>
+            <result column="majorName" property="name"></result>
+        </association>
+        <!--一对一的关系映射，封装配置academy的内容-->
+        <association property="academy" javaType="com.JavaG.domain.Academy">
+            <id property="id" column="aid"></id>
+            <result column="academyName" property="name"></result>
+        </association>
+
+    </resultMap>
+    <select id="findStudentDetailsById" parameterType="Integer" resultMap="studentMajorAcademyMap">
+        select
+        s.id as id,
+        s.name as name,
+        s.sex as sex,
+        s.nation as nation,
+        s.politicsStatus as politicsStatus,
+        s.idCard as idCard,
+        s.birth as birth,
+        s.phoneNum as phoneNum,
+        s.grade as grade,
+        s.nativePlace as nativePlace,
+        m.id as mid,
+        m.name as majorName,
+        a.id as aid,
+        a.name as academyName
+        from major m ,student s, academy a
+        where s.majorId=m.id
+        and s.academyId=a.id
+        and s.id=#{id}
+    </select>
+    <select id="findStudentById" parameterType="int" resultMap="studentMajorAcademyMap">
+        select
+        s.id as id,
+        s.name as name,
+        s.sex as sex,
+        s.nation as nation,
+        s.politicsStatus as politicsStatus,
+        s.idCard as idCard,
+        s.birth as birth,
+        s.phoneNum as phoneNum,
+        s.grade as grade,
+        s.nativePlace as nativePlace,
+        s.majorId as majorId,
+        s.academyId as academyId,
+        m.id as mid,
+        m.name as majorName,
+        a.id as aid,
+        a.name as academyName
+        from major m ,student s, academy a
+        where s.majorId=m.id
+        and s.academyId=a.id
+        and s.id=#{id}
+    </select>
+
+
+    <select id="findAll" resultMap="studentMajorAcademyMap">
+        select
+        s.id as id,
+        s.name as name,
+        s.sex as sex,
+        s.nation as nation,
+        s.politicsStatus as politicsStatus,
+        s.idCard as idCard,
+        s.birth as birth,
+        s.phoneNum as phoneNum,
+        s.grade as grade,
+        s.nativePlace as nativePlace,
+        s.majorId as majorId,
+        s.academyId as academyId,
+        m.id as mid,
+        m.name as majorName,
+        a.id as aid,
+        a.name as academyName
+        from major m ,student s, academy a
+        where s.majorId=m.id
+        and s.academyId=a.id
+    </select>
+    <select id="findStudentByAcademyName" parameterType="String" resultMap="studentMajorAcademyMap">
+        select
+        s.id as id,
+        s.name as name,
+        s.sex as sex,
+        s.nation as nation,
+        s.politicsStatus as politicsStatus,
+        s.idCard as idCard,
+        s.birth as birth,
+        s.phoneNum as phoneNum,
+        s.grade as grade,
+        s.nativePlace as nativePlace,
+        s.majorId as majorId,
+        s.academyId as academyId,
+        m.id as mid,
+        m.name as majorName,
+        a.id as aid,
+        a.name as academyName
+        from major m ,student s, academy a
+        where s.majorId=m.id
+        and s.academyId=a.id
+        and a.name=#{academyName}
+    </select>
+    <select id="findStudentByMajorName" parameterType="String" resultMap="studentMajorAcademyMap">
+        select
+        s.id as id,
+        s.name as name,
+        s.sex as sex,
+        s.nation as nation,
+        s.politicsStatus as politicsStatus,
+        s.idCard as idCard,
+        s.birth as birth,
+        s.phoneNum as phoneNum,
+        s.grade as grade,
+        s.nativePlace as nativePlace,
+        s.majorId as majorId,
+        s.academyId as academyId,
+        m.id as mid,
+        m.name as majorName,
+        a.id as aid,
+        a.name as academyName
+        from major m ,student s, academy a
+        where s.majorId=m.id
+        and s.academyId=a.id
+        and m.name=#{majorName}
+    </select>
+
+    <delete id="deleteStudentInfo" parameterType="int">
+        delete
+        from student
+        where id=#{id};
+    </delete>
+<select id="findStudentByidCard" parameterType="String" resultType="Integer">
+    select id
+    from student s
+    where s.idCard=#{idCard}
+</select>
+    <update id="updateStudentInfo" parameterType="com.JavaG.domain.Student">
+        update
+        student
+        set
+        name = #{name},
+        sex = #{sex},
+        nation = #{nation},
+        politicsStatus = #{politicsStatus},
+        idCard = #{idCard},
+        majorId = #{majorId},
+        academyId = #{academyId},
+        phoneNum = #{phoneNum},
+        birth = #{birth},
+        grade =#{grade},
+        nativePlace=#{nativePlace}
+        where id = #{id}
+    </update>
+    <insert id="insertOneStudentInfo" parameterType="com.JavaG.domain.Student">
+        insert
+        into student(name,sex,nation,politicsStatus,idCard,majorId,academyId,phoneNum,birth,nativePlace,grade)
+        values(#{name},#{sex},#{nation},#{politicsStatus},#{idCard},#{majorId},#{academyId},#{phoneNum},#{birth},#{nativePlace},#{grade})
+    </insert>
+</mapper>
